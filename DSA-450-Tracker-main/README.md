@@ -41,7 +41,7 @@
 > Clone the repo
     >> For Windows: Git Bash
     >> For Linux: Terminal
-    >> git clone https://github.com/ProgrammerShri/DSA-450-Tracker
+    >> git clone https://github.com/Himanshu39435/DSA-450-Tracker
 > Change the folder location to your source Code Folder
     >> cd 450dsa/src
 > Install the dependencies

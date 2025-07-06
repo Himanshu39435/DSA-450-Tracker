@@ -70,11 +70,11 @@ export default function About({ resetData, exportData, importData }) {
             <h4 className="text-center my-5">
               Project Recreated by
               <a
-                href="https://www.linkedin.com/in/programmershri"
+                href="https://www.linkedin.com/in/hk39435?"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                : Shrikant Dewangan (Programmer Shri)
+                : Himanshu Kumar (Himanshu39435)
               </a>{" "}
               <span role="img" aria-label="code-men">
                 👨🏻‍💻

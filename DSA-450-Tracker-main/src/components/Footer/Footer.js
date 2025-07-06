@@ -11,7 +11,7 @@ export default function Footer({ dark, setDark }) {
       >
         <div className="d-flex bd-highlight">
           <div className="p-2 bd-highlight">
-            <a href="https://github.com/ProgrammerShri/DSA-450-Tracker">
+            <a href="https://github.com/Himanshu39435/DSA-450-Tracker">
               <h4>
                 <Badge pill variant="light" className="hvr-grow">
                   <span role="img" aria-label="star">
