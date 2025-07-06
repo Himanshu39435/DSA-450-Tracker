@@ -52,14 +52,15 @@
 > 450DSA runs on port 3000 of your Local Machine
 ```
 
-[![OPEN-PR](https://img.shields.io/badge/Open%20For-PR-orange?style=for-the-badge&logo=github)](https://github.com/ProgrammerShri/DSA-450-Tracker)
+[![OPEN-PR](https://img.shields.io/badge/Open%20For-PR-orange?style=for-the-badge&logo=github)](https://github.com/Himanshu39435/DSA-450-Tracker)
 
 ## Credits 🙏🏻
 
 #### Curated list of question in [450dsa] is based on _[DSA Cracker Sheet]_ by [Love Babbar]
 
 [here]: https://www.youtube.com/watch?v=4iFALQ1ACdA
-[450dsa]: https://dsa450tracker.web.app/
+[450dsa]: https://himanshu39435.github.io/DSA-450-Tracker/
+
 [love babbar]: https://www.linkedin.com/in/love-babbar-38ab2887/
 [dsa cracker sheet]: https://drive.google.com/file/d/1FMdN_OCfOI0iAeDlqswCiC2DZzD4nPsb/view
 [localbase]: https://github.com/dannyconnell/localbase
