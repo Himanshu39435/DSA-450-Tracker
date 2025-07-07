@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/DSA-450-Tracker/precache-manifest.33084fb38598654494519328b842bc41.js"
+  "/DSA-450-Tracker/precache-manifest.0116e9e07c52a1ac3442c76e0208919e.js"
 );
 
 self.addEventListener('message', (event) => {
