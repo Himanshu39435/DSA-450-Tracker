@@ -2,7 +2,7 @@
 	"name": "450dsa",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://himanshu39435.github.io/DSA-450-Tracker",
+	
 	"dependencies": {
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.5.0",
