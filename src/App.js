@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import {
   getData,
   updateDBData,
@@ -48,7 +48,7 @@ function App() {
         setDark(true);
       }
     }
-  }, []);
+  }, [dark]);
 
   //to update progress in '/' route and also update DB
   function updateData(key, topicData, topicPosition) {
@@ -96,7 +96,7 @@ function App() {
   }
 
   return (
-    <Router>
+    
       <div className={dark ? "App dark" : "App"}>
         <h1
           className="app-heading text-center mt-5"
@@ -227,7 +227,7 @@ function App() {
         )}
         <Footer dark={dark} setDark={setDark}></Footer>
       </div>
-    </Router>
+    
   );
 }
 

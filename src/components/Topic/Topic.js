@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -16,21 +16,22 @@ import { ThemeContext } from "../../App";
 import Button from "react-bootstrap/Button";
 
 export default function Topic({ data, updateData }) {
-	/*
-	  This component takes data releted to a paticular topic 
-	  and updateData() from App component
-	*/
-
-	/*
-	  Setting state for fields that comes from `data` prop 
-	  so that `data` prop is not undefined on reload
-	*/
 	const [select, setSelected] = useState([]);
 	const [questionsTableData, setQuestionsTableData] = useState([]);
 	const [topicName, setTopicName] = useState("");
-
 	const dark = useContext(ThemeContext);
-	// updating states using useEffect with dependency  on `data` prop
+
+	const shownotes = useCallback((ind) => {
+		document.getElementsByClassName("note-section")[0].style.display = "block";
+		document.getElementsByClassName("note-exit")[0].style.display = "block";
+		document.getElementsByClassName("note-save")[0].style.display = "block";
+		document.getElementsByClassName("note-area")[0].style.display = "block";
+
+		localStorage.setItem("cid", ind);
+		document.getElementsByClassName("note-section")[0].value = data.questions[ind].Notes;
+		document.getElementsByClassName("question-title")[0].innerHTML = data.questions[ind].Problem;
+	}, [data]);
+
 	useEffect(() => {
 		if (data !== undefined) {
 			let doneQuestion = [];
@@ -39,16 +40,10 @@ export default function Topic({ data, updateData }) {
 				if (question.Done) {
 					doneQuestion.push(index);
 				}
-				/*
-				|	Hidden properties `_is_selected` and `_search_text` are used to sort the table
-				|	and search the table respectively. react-bootstrap-table does not allow sorting
-				|	by selectRow by default, and requires plain text to perform searches.
-				*/
 				return {
 					id: index,
 					question: (
 						<>
-							{/* Question link */}
 							<a
 								href={question.URL}
 								target="_blank"
@@ -67,7 +62,7 @@ export default function Topic({ data, updateData }) {
 									width="16"
 									height="16"
 									fill="currentColor"
-									class={question.Notes && question.Notes.length !== 0 ? "bi bi-sticky-fill" : "bi bi-sticky"}
+									className={question.Notes && question.Notes.length !== 0 ? "bi bi-sticky-fill" : "bi bi-sticky"}
 									viewBox="0 0 16 16"
 									style={{ float: "right", color: "green", cursor: "pointer" }}
 									onClick={() => shownotes(index)}
@@ -81,7 +76,6 @@ export default function Topic({ data, updateData }) {
 							</OverlayTrigger>
 						</>
 					),
-
 					_is_selected: question.Done,
 					_search_text: question.Problem,
 				};
@@ -90,9 +84,8 @@ export default function Topic({ data, updateData }) {
 			setTopicName(data.topicName);
 			setSelected(doneQuestion);
 		}
-	}, [data]);
+	}, [data, shownotes]);
 
-	//tooltip functions
 	const renderTooltipView = (props) => (
 		<Tooltip {...props} className="in" id="button-tooltip">
 			View Notes
@@ -105,11 +98,8 @@ export default function Topic({ data, updateData }) {
 		</Tooltip>
 	);
 
-	// seacrh bar config
 	const SearchBar = (props) => {
-		const handleChange = (e) => {
-			props.onSearch(e.target.value);
-		};
+		const handleChange = (e) => props.onSearch(e.target.value);
 		return (
 			<div className="container container-custom2">
 				<InputGroup className="mb-4">
@@ -117,7 +107,6 @@ export default function Topic({ data, updateData }) {
 						className="text-center"
 						placeholder="Search Question.. 🔍"
 						aria-label="Search Question"
-						aria-describedby="basic-addon2"
 						onChange={handleChange}
 					/>
 					<InputGroup.Append>{RandomButton()}</InputGroup.Append>
@@ -125,33 +114,14 @@ export default function Topic({ data, updateData }) {
 			</div>
 		);
 	};
-	// table config
+
 	const columns = [
-		{
-			dataField: "id",
-			text: "Q-Id",
-			headerStyle: { width: "130px", fontSize: "20px" },
-		},
-		{
-			dataField: "question",
-			text: "Questions",
-			headerStyle: { fontSize: "20px" },
-		},
-		{
-			dataField: "_is_selected",
-			text: "Is Selected",
-			headerStyle: { fontSize: "20px" },
-			hidden: true,
-			sort: true,
-		},
-		{
-			dataField: "_search_text",
-			text: "Search Text",
-			headerStyle: { fontSize: "20px" },
-			hidden: true,
-		},
+		{ dataField: "id", text: "Q-Id", headerStyle: { width: "130px", fontSize: "20px" } },
+		{ dataField: "question", text: "Questions", headerStyle: { fontSize: "20px" } },
+		{ dataField: "_is_selected", text: "Is Selected", hidden: true, sort: true },
+		{ dataField: "_search_text", text: "Search Text", hidden: true },
 	];
-	const rowStyle = { fontSize: "20px" };
+
 	const selectRow = {
 		mode: "checkbox",
 		style: { background: dark ? "#393E46" : "#c8e6c9" },
@@ -159,12 +129,12 @@ export default function Topic({ data, updateData }) {
 		onSelect: handleSelect,
 		hideSelectAll: true,
 	};
+
 	const sortMode = {
 		dataField: "_is_selected",
 		order: "asc",
 	};
 
-	// func() triggered when a question is marked done
 	function handleSelect(row, isSelect) {
 		let key = topicName.replace(/[^A-Z0-9]+/gi, "_").toLowerCase();
 		let newDoneQuestion = [...select];
@@ -174,18 +144,16 @@ export default function Topic({ data, updateData }) {
 				if (isSelect) {
 					newDoneQuestion.push(row.id);
 				} else {
-					var pos = newDoneQuestion.indexOf(row.id);
+					let pos = newDoneQuestion.indexOf(row.id);
 					newDoneQuestion.splice(pos, 1);
 				}
-				return question;
-			} else {
-				return question;
 			}
+			return question;
 		});
 		updateData(
 			key,
 			{
-				started: newDoneQuestion.length > 0 ? true : false,
+				started: newDoneQuestion.length > 0,
 				doneQuestions: newDoneQuestion.length,
 				questions: updatedQuestionsStatus,
 			},
@@ -194,46 +162,65 @@ export default function Topic({ data, updateData }) {
 		displayToast(isSelect, row.id);
 	}
 
-	// trigger an information message for user on select change
 	function displayToast(isSelect, id) {
-		const { type, icon, dir } = {
-			type: isSelect ? "Done" : "Incomplete",
-			icon: isSelect ? "🎉" : "🙇🏻‍♂️",
-			dir: isSelect ? "👇🏻" : "👆🏻",
-		};
+	const icon = isSelect ? (
+		<span role="img" aria-label="celebration">
+			🎉
+		</span>
+	) : (
+		<span role="img" aria-label="apology">
+			🙇🏻‍♂️
+		</span>
+	);
 
-		const title = `${isSelect ? select.length + 1 : select.length - 1}/${data.questions.length} Done ${icon}`;
-		const subTitle = `Question pushed ${dir} the table.`;
+	const dir = isSelect ? (
+		<span role="img" aria-label="pointing down">
+			👇🏻
+		</span>
+	) : (
+		<span role="img" aria-label="pointing up">
+			👆🏻
+		</span>
+	);
 
-		const Card = (
-			<>
-				<p>{title}</p>
-				<p className="toast-subtitle">{subTitle}</p>
-			</>
-		);
+	const type = isSelect ? "Done" : "Incomplete";
 
-		toast(Card, {
-			className: `toast-${type}`,
-			autoClose: 2000,
-			closeButton: true,
-		});
-	}
+	const title = (
+		<>
+			{select.length + (isSelect ? 1 : -1)}/{data.questions.length} Done {icon}
+		</>
+	);
 
-	//Notes component
-	const NoteSection = (props) => {
+	const subTitle = <>Question pushed {dir} the table.</>;
+
+	const Card = (
+		<>
+			<p>{title}</p>
+			<p className="toast-subtitle">{subTitle}</p>
+		</>
+	);
+
+	toast(Card, {
+		className: `toast-${type}`,
+		autoClose: 2000,
+		closeButton: true,
+	});
+}
+
+
+	const NoteSection = () => {
 		let id = localStorage.getItem("cid");
-
 		const [quickNotes, setQuickNotes] = useState(data.questions[id]?.Notes);
+
 		const addnewnotes = (event) => {
 			setQuickNotes(event.target.value);
 		};
 
 		const onadd = () => {
 			let key = topicName.replace(/[^A-Z0-9]+/gi, "_").toLowerCase();
-			// let id = localStorage.getItem("cid");
 			if (id) {
 				let que = data.questions;
-				que[id].Notes = quickNotes.trim().length === 0 ? "" : quickNotes.trim();
+				que[id].Notes = quickNotes.trim();
 				updateData(
 					key,
 					{
@@ -244,31 +231,33 @@ export default function Topic({ data, updateData }) {
 					data.position
 				);
 				localStorage.removeItem("cid");
-			} else {
-				saveAndExitNotes();
 			}
+			saveAndExitNotes();
 		};
 
 		return (
-			<>
-				<div className="note-area">
-					<div className="note-container">
-						<div className="question-title" style={{ color: "black" }}></div>
-						<textarea maxLength="432" className="note-section" placeholder="your notes here" onChange={addnewnotes}></textarea>
-						<div className="button-container">
-							<button className="note-exit" onClick={saveAndExitNotes}>
-								Close
-							</button>
-							<button className="note-save" onClick={onadd}>
-								Save
-							</button>
-						</div>
+			<div className="note-area">
+				<div className="note-container">
+					<div className="question-title" style={{ color: "black" }}></div>
+					<textarea
+						maxLength="432"
+						className="note-section"
+						placeholder="your notes here"
+						onChange={addnewnotes}
+					></textarea>
+					<div className="button-container">
+						<button className="note-exit" onClick={saveAndExitNotes}>
+							Close
+						</button>
+						<button className="note-save" onClick={onadd}>
+							Save
+						</button>
 					</div>
 				</div>
-			</>
+			</div>
 		);
 	};
-	//function for closing notes
+
 	function saveAndExitNotes() {
 		document.getElementsByClassName("note-section")[0].style.display = "none";
 		document.getElementsByClassName("note-exit")[0].style.display = "none";
@@ -276,31 +265,22 @@ export default function Topic({ data, updateData }) {
 		document.getElementsByClassName("note-area")[0].style.display = "none";
 		localStorage.removeItem("cid");
 	}
-	//funtion for taking notes
-	function shownotes(ind) {
-		document.getElementsByClassName("note-section")[0].style.display = "block";
-		document.getElementsByClassName("note-exit")[0].style.display = "block";
-		document.getElementsByClassName("note-save")[0].style.display = "block";
-		document.getElementsByClassName("note-area")[0].style.display = "block";
-
-		localStorage.setItem("cid", ind);
-		document.getElementsByClassName("note-section")[0].value = data.questions[ind].Notes;
-		document.getElementsByClassName("question-title")[0].innerHTML = data.questions[ind].Problem;
-	}
 
 	function RandomButton() {
 		let min = 0;
 		let max = data.questions.length - 1;
-		let rnd = Math.floor(Math.random() * (max - min)) + min;
+		let rnd = Math.floor(Math.random() * (max - min + 1)) + min;
 		return (
 			<Button className="pick-random-btn" variant="outline-primary" href={data.questions[rnd].URL} target="_blank">
-				Pick Random{" "}
-				<span role="img" aria-label="woman-juggling-emoji">
-					🤹🏻‍♀️
-				</span>
-			</Button>
+  Pick Random{" "}
+  <span role="img" aria-label="woman-juggling-emoji">
+    🤹🏻‍♀️
+  </span>
+</Button>
+
 		);
 	}
+
 	return (
 		<>
 			<h3 className="text-center mb-4">
@@ -317,23 +297,27 @@ export default function Topic({ data, updateData }) {
 					keyField="id"
 					data={questionsTableData}
 					columns={columns}
-					rowStyle={rowStyle}
+					rowStyle={{ fontSize: "20px" }}
 					search
 				>
 					{(props) => (
 						<div>
-							<div className="header-rand">
-								{SearchBar({...props.searchProps})}
-							</div>
+							<div className="header-rand">{SearchBar({ ...props.searchProps })}</div>
 							<div className="container container-custom" style={{ overflowAnchor: "none" }}>
 								<Fade duration={600}>
-									<BootstrapTable {...props.baseProps} selectRow={selectRow} sort={sortMode} classes={dark ? "dark-table" : ""} />
+									<BootstrapTable
+										{...props.baseProps}
+										selectRow={selectRow}
+										sort={sortMode}
+										classes={dark ? "dark-table" : ""}
+									/>
 								</Fade>
 							</div>
 						</div>
 					)}
 				</ToolkitProvider>
 			)}
+
 			<ToastContainer />
 			<NoteSection />
 		</>
