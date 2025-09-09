@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/DSA-450-Tracker/static/css/main.18022aad.chunk.css",
+    "main.js": "/DSA-450-Tracker/static/js/main.71ea5b77.chunk.js",
+    "main.js.map": "/DSA-450-Tracker/static/js/main.71ea5b77.chunk.js.map",
+    "runtime-main.js": "/DSA-450-Tracker/static/js/runtime-main.b535b49e.js",
+    "runtime-main.js.map": "/DSA-450-Tracker/static/js/runtime-main.b535b49e.js.map",
+    "static/css/2.7e784593.chunk.css": "/DSA-450-Tracker/static/css/2.7e784593.chunk.css",
+    "static/js/2.e236d28b.chunk.js": "/DSA-450-Tracker/static/js/2.e236d28b.chunk.js",
+    "static/js/2.e236d28b.chunk.js.map": "/DSA-450-Tracker/static/js/2.e236d28b.chunk.js.map",
+    "index.html": "/DSA-450-Tracker/index.html",
+    "precache-manifest.88f39ea6f7b94d8bdd96940174274c46.js": "/DSA-450-Tracker/precache-manifest.88f39ea6f7b94d8bdd96940174274c46.js",
+    "service-worker.js": "/DSA-450-Tracker/service-worker.js",
+    "static/css/2.7e784593.chunk.css.map": "/DSA-450-Tracker/static/css/2.7e784593.chunk.css.map",
+    "static/css/main.18022aad.chunk.css.map": "/DSA-450-Tracker/static/css/main.18022aad.chunk.css.map",
+    "static/js/2.e236d28b.chunk.js.LICENSE.txt": "/DSA-450-Tracker/static/js/2.e236d28b.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b535b49e.js",
+    "static/css/2.7e784593.chunk.css",
+    "static/js/2.e236d28b.chunk.js",
+    "static/css/main.18022aad.chunk.css",
+    "static/js/main.71ea5b77.chunk.js"
+  ]
+}
